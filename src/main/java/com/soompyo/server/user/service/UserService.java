@@ -50,7 +50,7 @@ public class UserService {
 
     @Transactional
     public UserLoginResponseDto login(UserLoginRequestDto dto) {
-        User findedUser = userRepository.findActivateByEmail(dto.email())
+        User findedUser = userRepository.findActiveByEmail(dto.email())
             .orElseThrow(UserLogInInformationMismatchException::new);
 
         if (!isPasswordMatch(dto.password(), findedUser.getPassword())) {
@@ -80,18 +80,18 @@ public class UserService {
 
     @Transactional
     public void softDeleteUser(String email) {
-        User findedUser = userRepository.findActivateByEmail(email).orElseThrow(UserNotFoundException::new);
+        User findedUser = userRepository.findActiveByEmail(email).orElseThrow(UserNotFoundException::new);
         findedUser.softDelete();
     }
 
     public UserDetailResponseDto getUserByEmail(String username) {
-        User findedUser = userRepository.findActivateByEmail(username).orElseThrow(UserNotFoundException::new);
+        User findedUser = userRepository.findActiveByEmail(username).orElseThrow(UserNotFoundException::new);
         return userMapper.toUserDetailDto(findedUser);
     }
 
     @Transactional
     public void updateUserPassword(String email, UserPasswordUpdateRequestDto dto) {
-        User findedUser = userRepository.findActivateByEmail(email).orElseThrow(UserNotFoundException::new);
+        User findedUser = userRepository.findActiveByEmail(email).orElseThrow(UserNotFoundException::new);
         if (!isPasswordMatch(dto.currentPassword(), findedUser.getPassword())) {
             throw new UserPasswordMismatchException();
         } else if (isPasswordMatch(dto.newPassword(), findedUser.getPassword())) {

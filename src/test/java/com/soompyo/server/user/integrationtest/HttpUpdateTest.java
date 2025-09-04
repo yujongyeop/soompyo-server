@@ -45,7 +45,7 @@ class HttpUpdateTest {
         ResponseEntity<Void> response = fixture.client()
             .exchange("/api/v1/users/me/password", HttpMethod.PATCH, new HttpEntity<>(updateDto), Void.class);
 
-        User updatedUser = userRepository.findActivateByEmail(email).orElseThrow();
+        User updatedUser = userRepository.findActiveByEmail(email).orElseThrow();
 
         // Assert
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);

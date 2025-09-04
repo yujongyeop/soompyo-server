@@ -15,6 +15,6 @@ public interface UserRepository {
 
     void deleteAll();
 
-    Optional<User> findActivateByEmail(String email);
+    Optional<User> findActiveByEmail(String email);
 
 }
