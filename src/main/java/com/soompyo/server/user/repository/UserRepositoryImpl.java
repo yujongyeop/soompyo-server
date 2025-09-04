@@ -31,7 +31,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Optional<User> findActivateByEmail(String email) {
+    public Optional<User> findActiveByEmail(String email) {
         return userJpaRepository.findByEmailAndStatus(email, UserStatus.ACTIVE);
     }
 
