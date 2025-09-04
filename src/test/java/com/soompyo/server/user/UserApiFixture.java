@@ -25,7 +25,7 @@ public record UserApiFixture(TestRestTemplate client, UserRepository userReposit
 
     public static final String SIGN_UP_URI = "/api/v1/users/signUp";
     public static final String LOG_IN_URI = "/api/v1/users/login";
-    public static final String DELETE_USER_URI = "/api/v1/users/me";
+    public static final String USER_DETAIL_URI = "/api/v1/users/me";
     public static final String PASSWORD_UPDATE_URI = "/api/v1/users/me/password";
 
     public static UserApiFixture create(Environment environment, UserRepository userRepository) {
@@ -86,8 +86,12 @@ public record UserApiFixture(TestRestTemplate client, UserRepository userReposit
         return response;
     }
 
-    public ResponseEntity<Void> deleteUser() {
-        return client.exchange(DELETE_USER_URI, HttpMethod.DELETE, null, Void.class);
+    public ResponseEntity<ApiResponse<Void>> requestMyInfo() {
+        return client.exchange(USER_DETAIL_URI, HttpMethod.GET, null, ApiResponseType.VOID);
+    }
+
+    public ResponseEntity<ApiResponse<Void>> deleteUser() {
+        return client.exchange(USER_DETAIL_URI, HttpMethod.DELETE, null, ApiResponseType.VOID);
     }
 
     public <T> ResponseEntity<ApiResponse<T>> updateUserPassword(UserPasswordUpdateRequestDto dto,

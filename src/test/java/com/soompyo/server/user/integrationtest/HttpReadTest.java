@@ -16,9 +16,7 @@ import com.soompyo.server.user.repository.UserRepository;
 
 @UserApiTest
 @DisplayName("사용자 조회 API - GET /api/v1/users")
-public class HttpReadTest {
-
-    public static final String USER_GET_URI = "/api/v1/users/me";
+class HttpReadTest {
 
     @BeforeEach
     void beforeEach(@Autowired UserRepository userRepository) {
@@ -28,7 +26,7 @@ public class HttpReadTest {
     @Test
     void 로그인_하지않고_요청하면_403_FORBIDDEN_상태코드를_반환한다(@Autowired UserApiFixture fixture) {
         // Act
-        ResponseEntity<Void> response = fixture.client().getForEntity(USER_GET_URI, Void.class);
+        ResponseEntity<ApiResponse<Void>> response = fixture.requestMyInfo();
 
         // Assert
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
@@ -40,7 +38,7 @@ public class HttpReadTest {
         fixture.signUpAndLoginUser();
 
         // Act
-        ResponseEntity<Void> response = fixture.client().getForEntity(USER_GET_URI, Void.class);
+        ResponseEntity<ApiResponse<Void>> response = fixture.requestMyInfo();
 
         // Assert
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -53,10 +51,10 @@ public class HttpReadTest {
         fixture.deleteUser();
 
         // Act
-        ResponseEntity<ApiResponse> response = fixture.client().getForEntity(USER_GET_URI, ApiResponse.class);
+        ResponseEntity<ApiResponse<Void>> response = fixture.requestMyInfo();
 
         // Assert
-        ApiResponse body = response.getBody();
+        ApiResponse<Void> body = response.getBody();
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
         assertThat(body).isNotNull();
     }

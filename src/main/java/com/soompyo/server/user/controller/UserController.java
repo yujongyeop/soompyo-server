@@ -2,6 +2,7 @@ package com.soompyo.server.user.controller;
 
 import java.security.Principal;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,30 +32,30 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/me")
-    public ApiResponse<UserDetailResponseDto> getUser(Principal principal) {
-        return ApiResponse.ok(userService.getUserByEmail(principal.getName()));
+    public ResponseEntity<ApiResponse<UserDetailResponseDto>> getUser(Principal principal) {
+        return ResponseEntity.ok(ApiResponse.ok(userService.getUserByEmail(principal.getName())));
     }
 
     @PatchMapping("/me/password")
-    public ApiResponse<Void> updateUserPassword(Principal principal,
+    public ResponseEntity<ApiResponse<Void>> updateUserPassword(Principal principal,
         @RequestBody @Valid UserPasswordUpdateRequestDto dto) {
         userService.updateUserPassword(principal.getName(), dto);
-        return ApiResponse.ok(null);
+        return ResponseEntity.ok(ApiResponse.ok(null));
     }
 
     @DeleteMapping("/me")
-    public ResponseEntity<Void> deleteUser(Principal principal) {
+    public ResponseEntity<ApiResponse<Void>> deleteUser(Principal principal) {
         userService.softDeleteUser(principal.getName());
-        return ApiResponse.noContent();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.noContent());
     }
 
     @PostMapping("/signUp")
-    public ApiResponse<UserSignUpResponseDto> signUp(@RequestBody @Valid UserSignUpRequestDto dto) {
-        return ApiResponse.ok(userService.signUp(dto));
+    public ResponseEntity<ApiResponse<UserSignUpResponseDto>> signUp(@RequestBody @Valid UserSignUpRequestDto dto) {
+        return ResponseEntity.ok(ApiResponse.ok(userService.signUp(dto)));
     }
 
     @PostMapping("/login")
-    public ApiResponse<UserLoginResponseDto> login(@RequestBody @Valid UserLoginRequestDto dto) {
-        return ApiResponse.ok(userService.login(dto));
+    public ResponseEntity<ApiResponse<UserLoginResponseDto>> login(@RequestBody @Valid UserLoginRequestDto dto) {
+        return ResponseEntity.ok(ApiResponse.ok(userService.login(dto)));
     }
 }

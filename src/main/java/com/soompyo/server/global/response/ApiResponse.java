@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 
@@ -27,8 +26,8 @@ public class ApiResponse<T> {
         return ApiResponse.of(data, HttpStatus.OK);
     }
 
-    public static ResponseEntity<Void> noContent() {
-        return ResponseEntity.noContent().build();
+    public static <T> ApiResponse<T> noContent() {
+        return ApiResponse.of(null, HttpStatus.NO_CONTENT);
     }
 
     public static <T> ApiResponse<T> of(T data, HttpStatus httpStatus) {

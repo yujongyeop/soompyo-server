@@ -6,8 +6,6 @@ import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,11 +37,10 @@ class HttpUpdateTest {
         fixture.signUpAndLoginUser(email, currentPassword);
 
         String newPassword = generatePassword();
-        UserPasswordUpdateRequestDto updateDto = new UserPasswordUpdateRequestDto(currentPassword, newPassword);
+        UserPasswordUpdateRequestDto dto = new UserPasswordUpdateRequestDto(currentPassword, newPassword);
 
         // Act
-        ResponseEntity<Void> response = fixture.client()
-            .exchange("/api/v1/users/me/password", HttpMethod.PATCH, new HttpEntity<>(updateDto), Void.class);
+        ResponseEntity<ApiResponse<Void>> response = fixture.updateUserPassword(dto, ApiResponseType.VOID);
 
         User updatedUser = userRepository.findActiveByEmail(email).orElseThrow();
 

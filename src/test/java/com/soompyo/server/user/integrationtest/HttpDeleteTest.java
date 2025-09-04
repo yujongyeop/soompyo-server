@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import com.soompyo.server.global.response.ApiResponse;
 import com.soompyo.server.user.UserApiFixture;
 import com.soompyo.server.user.UserApiTest;
 
@@ -21,7 +22,7 @@ class HttpDeleteTest {
         fixture.signUpAndLoginUser();
 
         // Act
-        ResponseEntity<Void> response = fixture.deleteUser();
+        ResponseEntity<ApiResponse<Void>> response = fixture.deleteUser();
 
         // Assert
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
@@ -34,7 +35,7 @@ class HttpDeleteTest {
         fixture.deleteUser();
 
         // Act
-        ResponseEntity<Void> response = fixture.deleteUser();
+        ResponseEntity<ApiResponse<Void>> response = fixture.deleteUser();
 
         // Assert
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
