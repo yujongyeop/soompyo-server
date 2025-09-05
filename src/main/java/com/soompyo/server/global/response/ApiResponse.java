@@ -48,6 +48,11 @@ public class ApiResponse<T> {
             HttpStatus.BAD_REQUEST.name(), "입력 값을 확인해주세요.");
     }
 
+    public static ApiResponse<Void> credentialFail() {
+        HttpStatus unauthorized = HttpStatus.UNAUTHORIZED;
+        return new ApiResponse<>(null, unauthorized.value(), "MEMBER-403", "사용자의 아이디 또는 비밀번호가 일치하지 않습니다.");
+    }
+
     @Getter
     @AllArgsConstructor
     public static class ErrorResponse {

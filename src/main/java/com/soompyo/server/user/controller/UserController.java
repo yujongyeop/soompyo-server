@@ -19,6 +19,7 @@ import com.soompyo.server.user.dto.request.UserSignUpRequestDto;
 import com.soompyo.server.user.dto.response.UserDetailResponseDto;
 import com.soompyo.server.user.dto.response.UserLoginResponseDto;
 import com.soompyo.server.user.dto.response.UserSignUpResponseDto;
+import com.soompyo.server.user.service.AuthService;
 import com.soompyo.server.user.service.UserService;
 
 import jakarta.validation.Valid;
@@ -30,6 +31,7 @@ import lombok.AllArgsConstructor;
 public class UserController {
 
     private final UserService userService;
+    private final AuthService authService;
 
     @GetMapping("/me")
     public ResponseEntity<ApiResponse<UserDetailResponseDto>> getUser(Principal principal) {
@@ -51,11 +53,11 @@ public class UserController {
 
     @PostMapping("/signUp")
     public ResponseEntity<ApiResponse<UserSignUpResponseDto>> signUp(@RequestBody @Valid UserSignUpRequestDto dto) {
-        return ResponseEntity.ok(ApiResponse.ok(userService.signUp(dto)));
+        return ResponseEntity.ok(ApiResponse.ok(authService.signUp(dto)));
     }
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<UserLoginResponseDto>> login(@RequestBody @Valid UserLoginRequestDto dto) {
-        return ResponseEntity.ok(ApiResponse.ok(userService.login(dto)));
+        return ResponseEntity.ok(ApiResponse.ok(authService.login(dto)));
     }
 }

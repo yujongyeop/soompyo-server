@@ -1,25 +1,25 @@
 package com.soompyo.server.global.security;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.soompyo.server.user.domain.User;
+import com.soompyo.server.user.domain.UserStatus;
 
 import lombok.Getter;
 
 @Getter
 public class CustomUserDetails implements UserDetails {
-    private final Long id;
-    private final String email;
-    private final String password;
+    private static final long serialVersionUID = 1L;
+    private final transient User user;
     private final Collection<? extends GrantedAuthority> authorities;
 
-    public CustomUserDetails(Long id, String email, String password,
-        Collection<? extends GrantedAuthority> authorities) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.authorities = authorities;
+    public CustomUserDetails(User user, Collection<? extends GrantedAuthority> authorities) {
+        this.user = user;
+        this.authorities = (authorities == null) ? List.of() : List.copyOf(authorities);
     }
 
     @Override
@@ -29,12 +29,12 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return password;
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return email;
+        return user.getEmail();
     }
 
     @Override
@@ -54,6 +54,6 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return user.getStatus() == UserStatus.ACTIVE;
     }
 }

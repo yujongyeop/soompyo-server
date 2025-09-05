@@ -3,9 +3,12 @@ package com.soompyo.server.global.security;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.crypto.SecretKey;
+
+import org.springframework.security.core.GrantedAuthority;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -23,17 +26,19 @@ public class JwtTokenProvider {
         this.issuer = issuer;
     }
 
-    public String generateAccessToken(Long userId, String email, String role) {
+    public String generateAccessToken(CustomUserDetails principal) {
         Instant now = Instant.now();
+        List<String> roles = principal.getAuthorities() == null ? List.of() :
+            principal.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
         return Jwts.builder()
             .header()
             .type("JWT")
             .and()
             .issuer(issuer)
-            .subject(String.valueOf(userId))
+            .subject(String.valueOf(principal.getUser().getId()))
             .issuedAt(Date.from(now))
             .expiration(Date.from(now.plusMillis(accessExpMillis)))
-            .claims(Map.of("email", email, "role", role))
+            .claims(Map.of("email", principal.getUser().getEmail(), "roles", roles))
             .signWith(secretKey)
             .compact();
     }
