@@ -1,11 +1,9 @@
 package com.soompyo.server.global.response;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
-import org.springframework.validation.FieldError;
 
 import com.soompyo.server.global.exception.BusinessException;
 
@@ -38,39 +36,18 @@ public class ApiResponse<T> {
         return new ApiResponse<>(data, httpStatus.value(), httpStatus.name(), message);
     }
 
-    public static ApiResponse<Void> fail(BusinessException exception) {
+    public static ApiResponse<Void> validationFail(BusinessException exception) {
         return new ApiResponse<>(null, exception.getHttpStatus().value(), exception.getErrorCode(),
             exception.getMessage());
     }
 
-    public static ApiResponse<List<ErrorResponse>> fail(BindException exception) {
-        return new ApiResponse<>(ErrorResponse.of(exception.getFieldErrors()), HttpStatus.BAD_REQUEST.value(),
+    public static ApiResponse<List<ValidationErrorResponse>> validationFail(BindException exception) {
+        return new ApiResponse<>(ValidationErrorResponse.of(exception.getFieldErrors()), HttpStatus.BAD_REQUEST.value(),
             HttpStatus.BAD_REQUEST.name(), "입력 값을 확인해주세요.");
     }
 
     public static ApiResponse<Void> credentialFail() {
         HttpStatus unauthorized = HttpStatus.UNAUTHORIZED;
         return new ApiResponse<>(null, unauthorized.value(), "MEMBER-403", "사용자의 아이디 또는 비밀번호가 일치하지 않습니다.");
-    }
-
-    @Getter
-    @AllArgsConstructor
-    public static class ErrorResponse {
-
-        private String field;
-        private String value;
-        private String reason;
-
-        public static List<ErrorResponse> of(List<FieldError> fieldErrors) {
-            return fieldErrors.stream()
-                .map(fieldError -> new ErrorResponse(fieldError.getField(), getRejectedValue(fieldError),
-                    fieldError.getDefaultMessage()))
-                .toList();
-        }
-
-        private static String getRejectedValue(FieldError fieldError) {
-            return Optional.ofNullable(fieldError.getRejectedValue()).orElse("null").toString();
-        }
-
     }
 }

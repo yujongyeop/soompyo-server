@@ -1,3 +1,5 @@
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
 plugins {
     id 'java'
     id 'org.springframework.boot' version '3.5.4'
@@ -64,4 +66,22 @@ tasks.named('test') {
 tasks.named('asciidoctor') {
     inputs.dir snippetsDir
     dependsOn test
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+tasks.withType(Test).configureEach {
+    testLogging {
+        events 'passed', 'skipped', 'failed'
+        exceptionFormat 'short'
+        showStandardStreams = false
+    }
+}
+
+// Boot JAR 파일명을 고정하여 Docker COPY를 안정화
+// 타입 힌트를 제공하여 IDE/Gradle가 프로퍼티를 인식하도록 설정
+tasks.named('bootJar', BootJar) {
+    archiveFileName = 'app.jar'
 }

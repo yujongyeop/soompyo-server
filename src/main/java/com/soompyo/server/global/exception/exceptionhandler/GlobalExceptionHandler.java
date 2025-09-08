@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.soompyo.server.global.exception.BusinessException;
 import com.soompyo.server.global.response.ApiResponse;
-import com.soompyo.server.global.response.ApiResponse.ErrorResponse;
+import com.soompyo.server.global.response.ValidationErrorResponse;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,14 +24,15 @@ public class GlobalExceptionHandler {
 
         log.error("Business error {} happened: {}", e.getClass().getName(), e.getMessage());
 
-        return new ResponseEntity<>(ApiResponse.fail(e), e.getHttpStatus());
+        return new ResponseEntity<>(ApiResponse.validationFail(e), e.getHttpStatus());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiResponse<List<ErrorResponse>>> handleException(MethodArgumentNotValidException e) {
+    public ResponseEntity<ApiResponse<List<ValidationErrorResponse>>> handleException(
+        MethodArgumentNotValidException e) {
         log.error("Validation error {} happened: {}", e.getClass().getName(), e.getMessage());
 
-        return new ResponseEntity<>(ApiResponse.fail(e), e.getStatusCode());
+        return new ResponseEntity<>(ApiResponse.validationFail(e), e.getStatusCode());
     }
 
     @ExceptionHandler(BadCredentialsException.class)
