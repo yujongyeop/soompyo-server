@@ -1,0 +1,97 @@
+= Soompyo API 문서
+:toc: left
+:toclevels: 2
+:sectanchors:
+:source-highlighter: highlightjs
+
+== 인증 API
+
+=== 회원가입 성공
+
+==== 요청
+
+include::{snippets}/auth-sign-up-success/http-request.adoc[]
+
+==== 요청 필드
+
+include::{snippets}/auth-sign-up-success/request-fields.adoc[]
+
+==== 응답
+
+include::{snippets}/auth-sign-up-success/http-response.adoc[]
+
+==== 응답 필드
+
+include::{snippets}/auth-sign-up-success/response-fields.adoc[]
+
+=== 회원가입 실패
+
+==== 요청
+
+include::{snippets}/auth-sign-up-fail/http-request.adoc[]
+
+==== 응답
+
+include::{snippets}/auth-sign-up-fail/http-response.adoc[]
+
+==== 응답 필드
+
+include::{snippets}/auth-sign-up-fail/response-fields.adoc[]
+
+=== 내 정보 조회 (GET /api/v1/users/me)
+
+==== 요청
+
+include::{snippets}/users-me-get/http-request.adoc[]
+
+==== 요청 헤더
+
+include::{snippets}/users-me-get/request-headers.adoc[]
+
+==== 응답
+
+include::{snippets}/users-me-get/http-response.adoc[]
+
+==== 응답 필드
+
+include::{snippets}/users-me-get/response-fields.adoc[]
+
+=== 비밀번호 변경 (PATCH /api/v1/users/me/password)
+
+==== 요청
+
+include::{snippets}/users-me-password-patch/http-request.adoc[]
+
+==== 요청 헤더
+
+include::{snippets}/users-me-password-patch/request-headers.adoc[]
+
+==== 요청 필드
+
+include::{snippets}/users-me-password-patch/request-fields.adoc[]
+
+==== 응답
+
+include::{snippets}/users-me-password-patch/http-response.adoc[]
+
+==== 응답 필드
+
+include::{snippets}/users-me-password-patch/response-fields.adoc[]
+
+=== 회원 탈퇴 (DELETE /api/v1/users/me)
+
+==== 요청
+
+include::{snippets}/users-me-delete/http-request.adoc[]
+
+==== 요청 헤더
+
+include::{snippets}/users-me-delete/request-headers.adoc[]
+
+==== 응답
+
+include::{snippets}/users-me-delete/http-response.adoc[]
+
+==== 응답 필드
+
+include::{snippets}/users-me-delete/response-fields.adoc[]

@@ -1,0 +1,53 @@
+package com.soompyo.server.global.response;
+
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindException;
+
+import com.soompyo.server.global.exception.BusinessException;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+public class ApiResponse<T> {
+    private T data;
+    private int code;
+    private String status;
+    private String message;
+
+    public static <T> ApiResponse<T> ok(T data) {
+        return ApiResponse.of(data, HttpStatus.OK);
+    }
+
+    public static <T> ApiResponse<T> noContent() {
+        return ApiResponse.of(null, HttpStatus.NO_CONTENT);
+    }
+
+    public static <T> ApiResponse<T> of(T data, HttpStatus httpStatus) {
+        return ApiResponse.of(data, httpStatus, httpStatus.getReasonPhrase());
+    }
+
+    public static <T> ApiResponse<T> of(T data, HttpStatus httpStatus, String message) {
+        return new ApiResponse<>(data, httpStatus.value(), httpStatus.name(), message);
+    }
+
+    public static ApiResponse<Void> validationFail(BusinessException exception) {
+        return new ApiResponse<>(null, exception.getHttpStatus().value(), exception.getErrorCode(),
+            exception.getMessage());
+    }
+
+    public static ApiResponse<List<ValidationErrorResponse>> validationFail(BindException exception) {
+        return new ApiResponse<>(ValidationErrorResponse.of(exception.getFieldErrors()), HttpStatus.BAD_REQUEST.value(),
+            HttpStatus.BAD_REQUEST.name(), "입력 값을 확인해주세요.");
+    }
+
+    public static ApiResponse<Void> credentialFail() {
+        HttpStatus unauthorized = HttpStatus.UNAUTHORIZED;
+        return new ApiResponse<>(null, unauthorized.value(), "MEMBER-403", "사용자의 아이디 또는 비밀번호가 일치하지 않습니다.");
+    }
+}
