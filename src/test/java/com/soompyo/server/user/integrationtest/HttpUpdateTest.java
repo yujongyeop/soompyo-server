@@ -10,17 +10,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.soompyo.server.ApiTest;
 import com.soompyo.server.global.ApiResponseType;
 import com.soompyo.server.global.exception.userexception.UserPasswordMismatchException;
 import com.soompyo.server.global.exception.userexception.UserPasswordUnchangedException;
 import com.soompyo.server.global.response.ApiResponse;
 import com.soompyo.server.user.UserApiFixture;
-import com.soompyo.server.user.UserApiTest;
 import com.soompyo.server.user.domain.User;
 import com.soompyo.server.user.dto.request.UserPasswordUpdateRequestDto;
 import com.soompyo.server.user.repository.UserRepository;
 
-@UserApiTest
+@ApiTest
 @DisplayName("사용자 수정 API - PATCH /api/v1/users/me/")
 class HttpUpdateTest {
     @Autowired

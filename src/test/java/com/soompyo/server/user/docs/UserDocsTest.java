@@ -24,10 +24,10 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.soompyo.server.ApiTest;
 import com.soompyo.server.global.domain.UserRole;
 import com.soompyo.server.global.security.CustomUserDetails;
 import com.soompyo.server.global.security.JwtTokenProvider;
-import com.soompyo.server.user.UserApiTest;
 import com.soompyo.server.user.domain.User;
 import com.soompyo.server.user.domain.UserStatus;
 import com.soompyo.server.user.dto.response.UserDetailResponseDto;
@@ -39,7 +39,7 @@ import com.soompyo.server.user.service.UserService;
  * - PATCH /api/v1/users/me/password
  * - DELETE /api/v1/users/me
  */
-@UserApiTest
+@ApiTest
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
 @ExtendWith(RestDocumentationExtension.class)
