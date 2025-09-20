@@ -1,8 +1,10 @@
 package com.soompyo.server.global.security;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,7 +25,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws
+    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
+        @NonNull FilterChain chain) throws
         ServletException,
         IOException {
         String auth = request.getHeader("Authorization");
@@ -32,9 +35,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 String token = auth.substring(7);
                 Jws<Claims> claims = provider.parseAndValidate(token);
                 String email = claims.getPayload().get("email", String.class);
-                String role = claims.getPayload().get("role", String.class);
 
-                List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role));
+                Object rolesObj = claims.getPayload().get("roles");
+                List<SimpleGrantedAuthority> authorities;
+
+                switch (rolesObj) {
+                    case List<?> list -> authorities = list.stream()
+                        .map(Object::toString)
+                        .map(SimpleGrantedAuthority::new)
+                        .toList();
+                    case String str -> authorities = Arrays.stream(str.split(","))
+                        .map(String::trim)
+                        .filter(s -> !s.isEmpty())
+                        .map(SimpleGrantedAuthority::new)
+                        .toList();
+                    default -> authorities = List.of();
+                }
+
                 UsernamePasswordAuthenticationToken principal = new UsernamePasswordAuthenticationToken(email, null,
                     authorities);
                 SecurityContextHolder.getContext().setAuthentication(principal);
