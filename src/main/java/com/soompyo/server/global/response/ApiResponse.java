@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 
 import com.soompyo.server.global.exception.BusinessException;
+import com.soompyo.server.global.exception.userexception.UserLogInInformationMismatchException;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -47,7 +48,8 @@ public class ApiResponse<T> {
     }
 
     public static ApiResponse<Void> credentialFail() {
-        HttpStatus unauthorized = HttpStatus.UNAUTHORIZED;
-        return new ApiResponse<>(null, unauthorized.value(), "MEMBER-403", "사용자의 아이디 또는 비밀번호가 일치하지 않습니다.");
+        UserLogInInformationMismatchException exception = new UserLogInInformationMismatchException();
+        return new ApiResponse<>(null, exception.getHttpStatus().value(), exception.getErrorCode(),
+            exception.getMessage());
     }
 }

@@ -32,9 +32,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 String token = auth.substring(7);
                 Jws<Claims> claims = provider.parseAndValidate(token);
                 String email = claims.getPayload().get("email", String.class);
-                String role = claims.getPayload().get("role", String.class);
+                @SuppressWarnings("unchecked")
+                List<String> roles = claims.getPayload().get("roles", List.class);
 
-                List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role));
+                List<SimpleGrantedAuthority> authorities = roles == null
+                    ? List.of()
+                    : roles.stream()
+                        .map(SimpleGrantedAuthority::new)
+                        .toList();
                 UsernamePasswordAuthenticationToken principal = new UsernamePasswordAuthenticationToken(email, null,
                     authorities);
                 SecurityContextHolder.getContext().setAuthentication(principal);
