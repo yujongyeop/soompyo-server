@@ -35,23 +35,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 String token = auth.substring(7);
                 Jws<Claims> claims = provider.parseAndValidate(token);
                 String email = claims.getPayload().get("email", String.class);
+                @SuppressWarnings("unchecked")
+                List<String> roles = claims.getPayload().get("roles", List.class);
 
-                Object rolesObj = claims.getPayload().get("roles");
-                List<SimpleGrantedAuthority> authorities;
-
-                switch (rolesObj) {
-                    case List<?> list -> authorities = list.stream()
-                        .map(Object::toString)
+                List<SimpleGrantedAuthority> authorities = roles == null
+                    ? List.of()
+                    : roles.stream()
                         .map(SimpleGrantedAuthority::new)
                         .toList();
-                    case String str -> authorities = Arrays.stream(str.split(","))
-                        .map(String::trim)
-                        .filter(s -> !s.isEmpty())
-                        .map(SimpleGrantedAuthority::new)
-                        .toList();
-                    default -> authorities = List.of();
-                }
-
                 UsernamePasswordAuthenticationToken principal = new UsernamePasswordAuthenticationToken(email, null,
                     authorities);
                 SecurityContextHolder.getContext().setAuthentication(principal);

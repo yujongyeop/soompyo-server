@@ -9,12 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import com.soompyo.server.ApiTest;
 import com.soompyo.server.global.response.ApiResponse;
 import com.soompyo.server.user.UserApiFixture;
-import com.soompyo.server.user.UserApiTest;
 import com.soompyo.server.user.repository.UserRepository;
 
-@UserApiTest
+@ApiTest
 @DisplayName("사용자 조회 API - GET /api/v1/users")
 class HttpReadTest {
 

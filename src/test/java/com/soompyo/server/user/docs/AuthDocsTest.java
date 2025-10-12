@@ -17,9 +17,9 @@ import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.soompyo.server.user.UserApiTest;
+import com.soompyo.server.ApiTest;
 
-@UserApiTest
+@ApiTest
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
 @ExtendWith(RestDocumentationExtension.class)

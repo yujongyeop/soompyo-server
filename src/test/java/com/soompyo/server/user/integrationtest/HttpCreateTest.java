@@ -11,17 +11,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import com.soompyo.server.ApiTest;
 import com.soompyo.server.global.ApiResponseType;
 import com.soompyo.server.global.exception.userexception.UserLogInInformationMismatchException;
 import com.soompyo.server.global.response.ApiResponse;
 import com.soompyo.server.user.UserApiFixture;
-import com.soompyo.server.user.UserApiTest;
 import com.soompyo.server.user.dto.request.UserLoginRequestDto;
 import com.soompyo.server.user.dto.request.UserSignUpRequestDto;
 import com.soompyo.server.user.dto.response.UserLoginResponseDto;
 import com.soompyo.server.user.dto.response.UserSignUpResponseDto;
 
-@UserApiTest
+@ApiTest
 @DisplayName("사용자 생성(회원가입 및 로그인) API - POST /api/v1/users/signUp & /api/v1/users/login")
 class HttpCreateTest {
 

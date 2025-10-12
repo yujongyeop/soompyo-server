@@ -8,11 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import com.soompyo.server.ApiTest;
 import com.soompyo.server.global.response.ApiResponse;
 import com.soompyo.server.user.UserApiFixture;
-import com.soompyo.server.user.UserApiTest;
 
-@UserApiTest
+@ApiTest
 @DisplayName("사용자 삭제 API - DELETE /api/v1/users/me")
 class HttpDeleteTest {
 
