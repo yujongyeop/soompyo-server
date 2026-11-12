@@ -17,8 +17,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ApiResponse<T> {
     private T data;
-    private int code;
-    private String status;
     private String message;
 
     public static <T> ApiResponse<T> ok(T data) {
@@ -30,26 +28,23 @@ public class ApiResponse<T> {
     }
 
     public static <T> ApiResponse<T> of(T data, HttpStatus httpStatus) {
-        return ApiResponse.of(data, httpStatus, httpStatus.getReasonPhrase());
+        return ApiResponse.of(data, httpStatus.getReasonPhrase());
     }
 
-    public static <T> ApiResponse<T> of(T data, HttpStatus httpStatus, String message) {
-        return new ApiResponse<>(data, httpStatus.value(), httpStatus.name(), message);
+    public static <T> ApiResponse<T> of(T data, String message) {
+        return new ApiResponse<>(data, message);
     }
 
     public static ApiResponse<Void> validationFail(BusinessException exception) {
-        return new ApiResponse<>(null, exception.getHttpStatus().value(), exception.getErrorCode(),
-            exception.getMessage());
+        return new ApiResponse<>(null, exception.getMessage());
     }
 
     public static ApiResponse<List<ValidationErrorResponse>> validationFail(BindException exception) {
-        return new ApiResponse<>(ValidationErrorResponse.of(exception.getFieldErrors()), HttpStatus.BAD_REQUEST.value(),
-            HttpStatus.BAD_REQUEST.name(), "입력 값을 확인해주세요.");
+        return new ApiResponse<>(ValidationErrorResponse.of(exception.getFieldErrors()), "입력 값을 확인해주세요.");
     }
 
     public static ApiResponse<Void> credentialFail() {
         UserLogInInformationMismatchException exception = new UserLogInInformationMismatchException();
-        return new ApiResponse<>(null, exception.getHttpStatus().value(), exception.getErrorCode(),
-            exception.getMessage());
+        return new ApiResponse<>(null, exception.getMessage());
     }
 }
